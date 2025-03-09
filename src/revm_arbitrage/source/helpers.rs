@@ -55,8 +55,11 @@ pub fn build_tx(to: Address, from: Address, calldata: Bytes, base_fee: u128) -> 
     tx
 }
 
-pub type 
-AlloyCacheDB = CacheDB<AlloyDB<Http<Client>, Ethereum, Arc<RootProvider<Http<Client>>>>>;
+pub type AlloyCacheDB = CacheDB<AlloyDB<Http<Client>, Ethereum, Arc<RootProvider<Http<Client>>>>>;
+
+pub fn init_cache_db(provider: Arc<RootProvider<Http<Client>>>) -> AlloyCacheDB {
+    CacheDB::new(AlloyDB::new(provider, Default::default()).unwrap())
+}
 
 pub fn revm_call(
     from: Address,
