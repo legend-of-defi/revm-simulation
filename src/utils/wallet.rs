@@ -7,7 +7,7 @@ use alloy::network::Ethereum;
 use alloy::primitives::{Address, U256};
 use alloy::providers::RootProvider;
 use alloy::sol;
-use eyre::Error;
+use eyre::{Error, Result};
 use std::env;
 use std::str::FromStr;
 
@@ -20,7 +20,6 @@ pub struct Wallet {
     /// The wallet's address
     address: Address,
     /// The ERC20 token contract address being tracked
-    #[allow(dead_code)]
     token_address: Address,
     /// The name of the ERC20 token
     #[allow(dead_code)]
@@ -50,13 +49,12 @@ impl Wallet {
     /// * `FLY_BASE_WALLET_ADDRESS` - The wallet address to track balances for
     ///
     /// # Returns
-    /// * `Result<Self, Box<dyn std::error::Error>>` - The wallet instance
+    /// * `Result<Self>` - The wallet instance
     ///
     /// # Errors
     /// * If `FLY_BASE_WALLET_ADDRESS` environment variable is not set
     /// * If wallet address is invalid
     /// * If token name query fails
-    #[allow(dead_code)]
     pub async fn new(
         provider: RootProvider<Ethereum>,
         token_address: Address,
@@ -82,12 +80,11 @@ impl Wallet {
     /// and stores it in the wallet's state.
     ///
     /// # Returns
-    /// * `Result<(), Error>` - Success or failure of balance update
+    /// * `Result<()>` - Success or failure of balance update
     ///
     /// # Errors
     /// * If balance query to ERC20 contract fails
-    #[allow(dead_code)]
-    pub async fn update_balance(&mut self) -> Result<(), Error> {
+    pub async fn update_balance(&mut self) -> Result<()> {
         let erc20 = ERC20::new(self.token_address, self.provider.clone());
         self.balance = Some(erc20.balanceOf(self.address).call().await?.balance);
         Ok(())

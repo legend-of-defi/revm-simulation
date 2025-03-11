@@ -26,6 +26,6 @@ Cargo.lock
 *.log
 *.env*
 .vscode/
-
+.evm_cache
 # IDE
 .idea/
